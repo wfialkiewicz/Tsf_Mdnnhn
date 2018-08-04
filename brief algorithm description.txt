@@ -1,0 +1,30 @@
+	There are variables x1, x2, x3, ..., xn, which values are being changed in time.
+That is for example variable x1 in different time intervals (t1, t2, t3, ...,tm) has different value assigned that is x1t1, x1t2, x1t3, ..., x1tm.
+Forecasting values of variables based on past data values is done in following way:
+
+For every variable x1, x2, x3 ..., xn are repeated following steps :
+
+I. Given the past time range for variable are found local minimas and maximas.
+This procedure is performed for given value MinValueChange, which specify what is the minimal difference between
+last extremum and current that makes current local minimum or maximum to be counted. In that way it is possible to "look" at the graph of 
+variable values with different magnification depending on MinValueChange. Values of time points for which local minima's and maxim's exists are being
+put to table TABLE_MIN_MAX.
+
+II. For every other variable than variable from point I. there is found value of those variables in time points for which there
+has been established local minima's and maxim's for variable from point I. Those values are also put to table TABLE_MIN_MAX.
+
+III. For every variable from table TABLE_MIN_MAX there is found biggest change that has occurred between all pairs of time points
+that are next to each other. That value is used to transform all changes between values in time points of variables in table TABLE_MIN_MAX
+to percentage scale in range (-1.0, 1.0).
+
+IV. To forecast value of variable are used values from window that precedes time interval that value is to be forecast,
+values from that window are transformed in a way similar to algorithm described in points I., II., III. for past values.
+
+V. After obtaining processed window from point IV., there are found similar windows to that window in table TABLE_MIN_MAX obtained in points I., II., III.
+These windows are found by accepting only windows for which percentage change in values of corresponding points in window is smaller that 
+given MaxValueChange.
+
+VI. Using windows from point V. Mdnnhn (Multidimensional Neural Network with Hypercube Neurons) is being trained,
+when Neural Network is trained on input of network are provided values from window obtained in point IV.
+On Output of the network there will forecasted values.
+
